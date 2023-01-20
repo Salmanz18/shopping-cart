@@ -4,13 +4,17 @@ import Products from './components/Products';
 import Cart from './components/Cart';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
 const URL = 'https://fakestoreapi.com/';
 
-const cartFromMemory = JSON.parse(localStorage.getItem('cart') || []);
+// Get Cart info from Local Storage
+const cartFromMemory = () => {
+  const savedCart = localStorage.getItem('cart');
+  const parsedCart = JSON.parse(savedCart);
+  return parsedCart || [];
+};
 
 const App = () => {
   const navigate = useNavigate();
@@ -37,7 +41,6 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
-
   const addToCart = (product) => {
     const cartProduct = product;
     setCart([...cart, cartProduct]);
