@@ -5,6 +5,7 @@ import Cart from './components/Cart';
 import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, useNavigate } from 'react-router-dom';
+import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 
 const URL = 'https://fakestoreapi.com/';
@@ -21,11 +22,13 @@ const App = () => {
 
   const [products, setProducts] = useState(null);
   const [cart, setCart] = useState(cartFromMemory);
+  const [search, setSearch] = useState('');
 
   const getProducts = async () => {
     try {
       const response = await axios.get(`${URL}products`);
       const data = response.data;
+      console.log(data);
       setProducts(data);
     } catch {
       throw new Error('Products not found');
@@ -41,6 +44,12 @@ const App = () => {
   useEffect(() => {
     localStorage.setItem('cart', JSON.stringify(cart));
   }, [cart]);
+
+  const handleSearch = (e) => {
+    const searchText = e.target.value;
+    setSearch(searchText);
+  };
+
   const addToCart = (product) => {
     const cartProduct = product;
     setCart([...cart, cartProduct]);
@@ -61,6 +70,13 @@ const App = () => {
 
   return (
     <div className='App'>
+      <Form.Control
+        className='search-input'
+        type='text'
+        onChange={handleSearch}
+        aria-label='Small'
+        aria-describedby='inputGroup-sizing-sm'
+      />
       <Button
         className='cart-btn'
         variant='secondary'
@@ -73,11 +89,19 @@ const App = () => {
       <Routes>
         <Route
           path='/'
-          element={<Products products={products} addToCart={addToCart} />}
+          element={
+            <Products
+              search={search}
+              products={products}
+              addToCart={addToCart}
+            />
+          }
         />
         <Route
           path='/cart'
-          element={<Cart cart={cart} handleBuyNow={handleBuyNow} />}
+          element={
+            <Cart search={search} cart={cart} handleBuyNow={handleBuyNow} />
+          }
         />
       </Routes>
     </div>

@@ -18,6 +18,11 @@
   margin-top: 20px;
 }
 
+.search-input {
+  width: fit-content !important;
+  display: inline !important;
+}
+
 .cart-btn {
   margin: 10px;
 }
