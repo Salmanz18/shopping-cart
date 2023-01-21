@@ -2,7 +2,9 @@ import React from 'react';
 import { Button, Card } from 'react-bootstrap';
 import '../App.css';
 
-const Cart = ({ search, cart, handleBuyNow }) => {
+const Cart = ({ search, debouncedSearch, cart, handleBuyNow }) => {
+  console.log(debouncedSearch);
+
   return (
     <>
       <div className='cart-container'>
@@ -12,7 +14,7 @@ const Cart = ({ search, cart, handleBuyNow }) => {
               const { title } = product;
               return search.toLowerCase() === ''
                 ? title
-                : title.toLowerCase().includes(search);
+                : title.toLowerCase().includes(debouncedSearch.toLowerCase());
             })
             .map((product) => {
               const { id, title, price, category } = product;

@@ -7,6 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
+import { useDebouncedValue } from './hooks/useDebouncedValue';
 
 const URL = 'https://fakestoreapi.com/';
 
@@ -23,6 +24,7 @@ const App = () => {
   const [products, setProducts] = useState(null);
   const [cart, setCart] = useState(cartFromMemory);
   const [search, setSearch] = useState('');
+  const debouncedSearch = useDebouncedValue(search, 500);
 
   const getProducts = async () => {
     try {
@@ -92,6 +94,7 @@ const App = () => {
           element={
             <Products
               search={search}
+              debouncedSearch={debouncedSearch}
               products={products}
               addToCart={addToCart}
             />
@@ -100,7 +103,12 @@ const App = () => {
         <Route
           path='/cart'
           element={
-            <Cart search={search} cart={cart} handleBuyNow={handleBuyNow} />
+            <Cart
+              search={search}
+              debouncedSearch={debouncedSearch}
+              cart={cart}
+              handleBuyNow={handleBuyNow}
+            />
           }
         />
       </Routes>
